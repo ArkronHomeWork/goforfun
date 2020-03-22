@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/go-chi/chi"
 	"log"
 	"net/http"
@@ -15,10 +16,17 @@ import (
 }*/
 
 func main() {
+	_, err := databaseConnect()
+	if err != nil {
+		log.Fatalf("Error %e database error", err)
+
+	}
 	r := chi.NewRouter()
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("welcome"))
+	r.Get("/{name}", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello World!")
 	})
-	err := http.ListenAndServe(":8888", r)
-	log.Fatalf("Error %e start server", err)
+	err = http.ListenAndServe(":8888", r)
+	if err != nil {
+		log.Fatalf("Error %e start server", err)
+	}
 }
