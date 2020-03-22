@@ -1,22 +1,13 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
+	"github.com/ArkronHomeWork/goforfun/repository"
 	"github.com/go-chi/chi"
 	"io/ioutil"
 	"log"
 	"net/http"
 )
-
-type postData struct {
-	userName     string
-	userPassword string
-}
-
-func (data *postData) toStruct(rawData []byte) error {
-	return json.Unmarshal(rawData, &data)
-}
 
 func main() {
 	_, err := databaseConnect()
@@ -34,9 +25,9 @@ func main() {
 	}
 
 	r.Post("/", func(w http.ResponseWriter, r *http.Request) {
-		data := new(postData)
+		data := new(repository.PostData)
 		rawData, err := ioutil.ReadAll(r.Body)
-		err = data.toStruct(rawData)
+		err = data.ToStruct(rawData)
 		if err != nil {
 			log.Print(err)
 			panic(err)
